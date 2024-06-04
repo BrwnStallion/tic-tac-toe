@@ -30,3 +30,42 @@ Gameboard
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Testing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+function Player() {
+    let name = '';
+
+    const setName = function(string) {
+        // ensure name is unique
+        
+        
+        // set name
+        name = string;
+    };
+    const getName = function() {
+        return name;
+    }
+    
+    let winCount = 0;
+    let lossCount = 0;
+    let drawCount = 0;
+    const addWin = function() {
+        winCount++;
+    };
+    const addLoss = function() {
+        lossCount++;
+    };
+    const addDraw = function() {
+        drawCount++;
+    };
+    const getRecord = function() {
+        return `(${winCount}, ${lossCount}, ${drawCount})`;
+    };
+
+    return {
+        setName,
+        getName,
+        addWin,
+        addLoss,
+        addDraw,
+        getRecord,
+    };
+};
