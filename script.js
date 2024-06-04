@@ -44,20 +44,27 @@ function Player() {
         return name;
     }
     
-    let winCount = 0;
-    let lossCount = 0;
-    let drawCount = 0;
+    const record = {
+        wins: 0,
+        losses: 0,
+        draws: 0
+    };
     const addWin = function() {
-        winCount++;
+        record.wins++;
     };
     const addLoss = function() {
-        lossCount++;
+        record.losses++;
     };
     const addDraw = function() {
-        drawCount++;
+        record.draws++;
     };
     const getRecord = function() {
-        return `(${winCount}, ${lossCount}, ${drawCount})`;
+        return `(${record.wins}, ${record.losses}, ${record.draws})`;
+    };
+    const clearRecord = function() {
+        Object.keys(record).forEach((key) => {
+            record[key] = 0;
+        });
     };
 
     return {
@@ -67,5 +74,44 @@ function Player() {
         addLoss,
         addDraw,
         getRecord,
+        clearRecord,
     };
 };
+
+(function() {
+    const players = {
+        players: [],
+        init: function() {
+            this.cacheDom();
+            this.bindEvents();
+            this.render();
+        },
+        cacheDom: function() {
+            this.addPlayerBtn = document.querySelector('');
+            this.addPlayerInput = document.querySelector('');
+            this.resetPlayerStatsBtn = document.querySelector('');
+            this.removePlayerBtn = document.querySelector('');
+        },
+        bindEvents: function() {
+            this.addPlayerBtn
+                .addEventListener('click', this.addPlayer.bind(this));
+        },
+        render: function() {
+
+        },
+        addPlayer: function() {
+            const newPlayer = Player();
+            newPlayer.setName(this.addPlayerInput.value);
+            this.players.push(newPlayer);
+        },
+        resetPlayer: function(index) {
+            players[index].clearRecord();
+        },
+        removePlayer: function(index) {
+            players.shift(index, 1);
+        },
+    };
+
+    // players.init();
+
+})();
