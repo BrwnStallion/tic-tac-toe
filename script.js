@@ -30,6 +30,7 @@ Gameboard
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Testing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+// Player factory function
 function Player() {
     let name = '';
 
@@ -78,6 +79,7 @@ function Player() {
     };
 };
 
+// Player management module
 (function() {
     const players = {
         players: [],
@@ -116,6 +118,7 @@ function Player() {
 
 })();
 
+// Factory function for the game board
 function Gameboard() {
     const rows = 3;
     const columns = 3;
@@ -163,6 +166,7 @@ function GameController() {
     
 }
 
+// Factory function for each cell on the game board
 function Cell() {
     let value = 0;
     const addMarker = (player) => {
