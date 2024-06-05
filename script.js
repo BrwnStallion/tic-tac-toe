@@ -129,6 +129,34 @@ function Gameboard() {
             board[i].push(Cell());
         };
     };
+
+    const getBoard = function() {
+        return board;
+    };
+    const placeMarker = function(player, row, column) {
+        
+        // store object of the given reference
+        let cell = board[row-1][column-1];
+        
+        // check for empty cell at given reference
+        if (cell.getValue() === 0) {
+            
+            // use addMarker method on Cell
+            cell.addMarker(player);
+        } else {
+            return;
+        };
+
+    };
+    const printBoard = function() {
+        
+    };
+
+    return {
+        getBoard,
+        placeMarker,
+        printBoard,
+    };
 }
 
 function GameController() {
