@@ -115,3 +115,35 @@ function Player() {
     // players.init();
 
 })();
+
+function Gameboard() {
+    const rows = 3;
+    const columns = 3;
+    const board = [];
+    for (let i = 0; i < rows; i++) {
+        // create each row within the board container array
+        board[i] = [];
+
+        for (let j = 0; j < columns; j++) {
+            // push cell objects into each board row, for each column
+            board[i].push(Cell());
+        };
+    };
+}
+
+function GameController() {
+    
+}
+
+function Cell() {
+    let value = 0;
+    const addMarker = (player) => {
+        value = player;
+    };
+    const getValue = () => value;
+    
+    return {
+        addMarker,
+        getValue,
+    };
+}
