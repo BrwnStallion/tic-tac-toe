@@ -201,10 +201,22 @@ function Cell() {
             this.addPlayerInput = document.querySelector('');
             this.resetPlayerStatsBtn = document.querySelector('');
             this.removePlayerBtn = document.querySelector('');
+            this.playerOneBtn = document.querySelector('');
+            this.playerTwoBtn = document.querySelector('');
+            this.playerNilBtn = document.querySelector('');
+            // this will allow for player order listeners to be on one selector
+            this.playerCard = document.querySelector('');
         },
         bindEvents: function() {
             this.addPlayerBtn
                 .addEventListener('click', this.addPlayer.bind(this));
+            // Player order listeners can be combined into one
+            this.playerOneBtn
+                .addEventListener('click', this.setPlayerOne.bind(this));
+            this.playerTwoBtn
+                .addEventListener('click', this.setPlayerTwo.bind(this));
+            this.playerNilBtn
+                .addEventListener('click', this.unsetOrder.bind(this));
         },
         render: function() {
 
@@ -214,6 +226,37 @@ function Cell() {
             // newPlayer.setName(this.addPlayerInput.value);
             newPlayer.setName(name); // just for console testing
             this.players.push(newPlayer);
+        },
+        setPlayerOrder: function(event) {
+            // get dataset value on the player card
+            let playerIndex = event.target.parentElement.parentElement
+                .dataset.playerIndex;
+            // get the button ID to know which player order is being set
+            let playerOrder = event.target.classList;
+            switch (playerOrder) {
+                case 'player-one':
+                    this.players[playerIndex].setMarker(1);
+                break;
+                case 'player-two':
+                    this.players[playerIndex].setMarker(2);
+                break;
+                case 'nil':
+                    this.players[playerIndex].setMarker('');
+                break;
+            };
+        },
+        setPlayerOne: function(playerIndex) {
+            this.players[playerIndex].setMarker(1);
+        },
+        setPlayerTwo: function(playerIndex) {
+            this.players[playerIndex].setMarker(2);
+        },
+        switchPlayerOrder: function(playerOneIndex, playerTwoIndex) {
+            this.players[playerOneIndex].setMarker(2);
+            this.players[playerTwoIndex].setMarker(1);
+        },
+        unsetOrder: function(playerIndex) {
+            this.players[playerIndex].setMarker('');
         },
         resetPlayer: function(index) {
             this.players[index].clearRecord();
