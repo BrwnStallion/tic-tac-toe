@@ -79,45 +79,6 @@ function Player() {
     };
 };
 
-// Player management module
-(function() {
-    const players = {
-        players: [],
-        init: function() {
-            this.cacheDom();
-            this.bindEvents();
-            this.render();
-        },
-        cacheDom: function() {
-            this.addPlayerBtn = document.querySelector('');
-            this.addPlayerInput = document.querySelector('');
-            this.resetPlayerStatsBtn = document.querySelector('');
-            this.removePlayerBtn = document.querySelector('');
-        },
-        bindEvents: function() {
-            this.addPlayerBtn
-                .addEventListener('click', this.addPlayer.bind(this));
-        },
-        render: function() {
-
-        },
-        addPlayer: function() {
-            const newPlayer = Player();
-            newPlayer.setName(this.addPlayerInput.value);
-            this.players.push(newPlayer);
-        },
-        resetPlayer: function(index) {
-            players[index].clearRecord();
-        },
-        removePlayer: function(index) {
-            players.shift(index, 1);
-        },
-    };
-
-    // players.init();
-
-})();
-
 // Factory function for the game board
 function Gameboard() {
     const rows = 3;
@@ -163,7 +124,20 @@ function Gameboard() {
 }
 
 function GameController() {
-    
+    const board = Gameboard();
+
+        
+    const switchPlayerTurn = function() {
+        
+    };
+    const playRound = function() {
+        
+    };
+
+    return {
+        makeBoard,
+        playRound,
+    };
 }
 
 // Factory function for each cell on the game board
@@ -179,3 +153,75 @@ function Cell() {
         getValue,
     };
 }
+
+// Execution IIFE
+// (function() {
+
+    // player storage object
+    // listener for starting a game
+    // listener for continuing play
+    // method for instantiating players
+    const playerModule = {
+        players: [],
+        init: function() {
+            this.cacheDom();
+            this.bindEvents();
+            this.render();
+        },
+        cacheDom: function() {
+            // for managing players
+            this.addPlayerBtn = document.querySelector('');
+            this.addPlayerInput = document.querySelector('');
+            this.resetPlayerStatsBtn = document.querySelector('');
+            this.removePlayerBtn = document.querySelector('');
+            // for playing the game
+            this.startGameBtn = document.querySelector('');
+        },
+        bindEvents: function() {
+            this.addPlayerBtn
+                .addEventListener('click', this.addPlayer.bind(this));
+        },
+        render: function() {
+
+        },
+        addPlayer: function(name) {
+            const newPlayer = Player();
+            // newPlayer.setName(this.addPlayerInput.value);
+            newPlayer.setName(name); // just for console testing
+            this.players.push(newPlayer);
+        },
+        resetPlayer: function(index) {
+            this.players[index].clearRecord();
+        },
+        removePlayer: function(index) {
+            this.players.shift(index, 1);
+        },
+    };
+
+    const gameModule = {
+        init: function () {
+            this.cacheDom();
+            this.bindEvents();
+            this.render();
+        },
+        cacheDom: function() {
+            this.playBtn = document.querySelector('');
+            this.playAgainBtn = document.querySelector('');
+            this.returnHomeBtn = document.querySelector('');
+        },
+        bindEvents: function() {
+            this.playBtn
+                .addEventListener('click', this.playGame.bind(this));
+            this.playAgainBtn
+                .addEventListener('click', this.playGame.bind(this));
+            this.returnHomeBtn
+                .addEventListener('click', this.returnHome.bind(this));
+        },
+        playGame: function() {
+            
+        },
+        returnHome: function() {
+
+        },
+    }
+// })();
