@@ -30,7 +30,7 @@ Gameboard
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Testing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// Player factory function
+// Factory function for player objects
 function Player() {
     let name = '';
 
@@ -133,6 +133,20 @@ function Gameboard() {
     };
 }
 
+// Factory function for each cell on the game board
+function Cell() {
+    let value = 0;
+    const addMarker = (playerMarker) => {
+        value = playerMarker;
+    };
+    const getValue = () => value;
+    
+    return {
+        addMarker,
+        getValue,
+    };
+}
+
 function GameController(
     playerOneObj,
     playerTwoObj
@@ -168,19 +182,7 @@ function GameController(
     };
 }
 
-// Factory function for each cell on the game board
-function Cell() {
-    let value = 0;
-    const addMarker = (playerMarker) => {
-        value = playerMarker;
-    };
-    const getValue = () => value;
-    
-    return {
-        addMarker,
-        getValue,
-    };
-}
+
 
 // Execution IIFE
 // (function() {
@@ -319,6 +321,9 @@ function Cell() {
                 .addEventListener('click', this.playGame.bind(this));
             this.returnHomeBtn
                 .addEventListener('click', this.returnHome.bind(this));
+        },
+        render: function() {
+            
         },
         playGame: function() {
             const game = GameController();
