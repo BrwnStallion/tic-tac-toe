@@ -45,6 +45,7 @@ function Player() {
         
     let marker = '';
     const setMarker = function(value) {
+        // value corresponds to player1/player2
         marker = value;
     };
     const getMarker = () => marker;
@@ -226,6 +227,23 @@ function Cell() {
             // newPlayer.setName(this.addPlayerInput.value);
             newPlayer.setName(name); // just for console testing
             this.players.push(newPlayer);
+            
+            let playerIndex = this.players.length - 1;
+            this.setDefaultOrder(playerIndex);
+        },
+        getPlayerOne: function() {
+            // Look in player array for players with marker = 1
+            const playerOneSearch = this.players.findIndex( (player) => {
+                return player.getMarker() === 1;
+            });
+            return playerOneSearch;
+        },
+        getPlayerTwo: function() {
+            // Look in player array for players with marker = 2
+            const playerTwoSearch = this.players.findIndex( (player) => {
+                return player.getMarker() === 2;
+            });
+            return playerTwoSearch;
         },
         setPlayerOrder: function(event) {
             // get dataset value on the player card
@@ -235,14 +253,28 @@ function Cell() {
             let playerOrder = event.target.classList;
             switch (playerOrder) {
                 case 'player-one':
-                    this.players[playerIndex].setMarker(1);
+                    this.setPlayerOne(playerIndex);
                 break;
                 case 'player-two':
-                    this.players[playerIndex].setMarker(2);
+                    this.setPlayerTwo(playerIndex);
                 break;
                 case 'nil':
-                    this.players[playerIndex].setMarker('');
+                    this.setPlayerNil(playerIndex);
                 break;
+            };
+        },
+        setDefaultOrder: function(playerIndex) {
+            // set default player order (for use when player first created)
+            let p1Unset = this.getPlayerOne() < 0;
+            let p2Unset = !p1Unset && this.getPlayerTwo() < 0;
+            let bothSet = !p1Unset && this.getPlayerTwo() >= 0;
+            // set player order depending on which players are already set
+            if (p1Unset) {
+                this.setPlayerOne(playerIndex);
+            } else if (p2Unset) {
+                this.setPlayerTwo(playerIndex);
+            } else if (bothSet) {
+                this.setPlayerNil(playerIndex);
             };
         },
         setPlayerOne: function(playerIndex) {
@@ -250,6 +282,9 @@ function Cell() {
         },
         setPlayerTwo: function(playerIndex) {
             this.players[playerIndex].setMarker(2);
+        },
+        setPlayerNil: function(playerIndex) {
+            this.players[playerIndex].setMarker('');
         },
         switchPlayerOrder: function(playerOneIndex, playerTwoIndex) {
             this.players[playerOneIndex].setMarker(2);
