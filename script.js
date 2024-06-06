@@ -155,26 +155,65 @@ function GameController(
     const board = Gameboard();
 
     let activePlayer = playerOneObj;
+    let inactivePlayer = playerTwoObj;
 
     // change player order upon rematch
     const switchPlayerTurn = function() {
         if (activePlayer === playerOneObj) {
             activePlayer = playerTwoObj;
+            inactivePlayer = playerOneObj;
         } else {
             activePlayer = playerOneObj;
+            inactivePlayer = playerTwoObj;
         };
     };
     const playRound = function(row, column) {
         // verify that the selected location is open
         /*
-        when executed, placeMarker() returns a boolean representing
+        placeMarker() includes logic to check for valid/invalid move. When
+        executed, it places marker if valid. Always returns a boolean for
         valid/invalid move
         */
         if (board.placeMarker(activePlayer.getMarker(), row, column)) {
+            checkGameOver();
             switchPlayerTurn();
         } else {
             return;
         };
+    };
+    const checkGameOver = function() {
+        let playerMarker = activePlayer.getMarker();
+        const winCondition = {
+            row: '',
+            column: '',
+            diagonal: ''
+        };
+
+        // check if any row has cells which contain the same marker
+        board.getBoard().forEach( (row, index) => {
+            // check within the cells of a given row
+            let markersInRow = row.filter( (cell) => {
+                return cell.getValue() === playerMarker;
+            });
+            if (markersInRow.length === 3) {
+                winCondition.row = index;
+            };
+        });
+        // check if any column has cells which contain the same marker
+
+        // check if the two diagonals have cells which contain the same marker
+
+        
+        let playerWon = true;
+        activePlayer.addWin();
+        inactivePlayer.addLoss();
+        
+        // check if all cells full and no win condition
+        if (/* all cells full logic && */ !playerWon) {
+            activePlayer.addDraw();
+            inactivePlayer.addDraw();
+        };
+        
     };
 
     return {
