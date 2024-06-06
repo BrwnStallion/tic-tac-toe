@@ -41,10 +41,14 @@ function Player() {
         // set name
         name = string;
     };
-    const getName = function() {
-        return name;
-    }
-    
+    const getName = () => name;
+        
+    let marker = '';
+    const setMarker = function(value) {
+        marker = value;
+    };
+    const getMarker = () => marker;
+
     const record = {
         wins: 0,
         losses: 0,
@@ -59,9 +63,8 @@ function Player() {
     const addDraw = function() {
         record.draws++;
     };
-    const getRecord = function() {
-        return `(${record.wins}, ${record.losses}, ${record.draws})`;
-    };
+    const getRecord = () => `(${record.wins}, ${record.losses},`
+        + `${record.draws})`;
     const clearRecord = function() {
         Object.keys(record).forEach((key) => {
             record[key] = 0;
@@ -71,6 +74,8 @@ function Player() {
     return {
         setName,
         getName,
+        setMarker,
+        getMarker,
         addWin,
         addLoss,
         addDraw,
@@ -94,21 +99,25 @@ function Gameboard() {
         };
     };
 
-    const getBoard = function() {
-        return board;
+    const getBoard = () => board;
+    const checkVacant = function(row, column) {
+        let cell = board[row-1][column-1];
+        if (cell.getValue() === 0) {
+            return true;
+        } else {
+            return false;
+        };
     };
     const placeMarker = function(player, row, column) {
         
-        // store object of the given reference
-        let cell = board[row-1][column-1];
-        
         // check for empty cell at given reference
-        if (cell.getValue() === 0) {
+        if (checkVacant(row, column)) {
             
             // use addMarker method on Cell
-            cell.addMarker(player);
+            board[row-1][column-1].addMarker(player);
+            return true;
         } else {
-            return;
+            return false;
         };
 
     };
@@ -123,19 +132,37 @@ function Gameboard() {
     };
 }
 
-function GameController() {
+function GameController(
+    playerOneObj,
+    playerTwoObj
+) {
+    // create a board
     const board = Gameboard();
 
-        
+    let activePlayer = playerOneObj;
+
+    // change player order upon rematch
     const switchPlayerTurn = function() {
-        
+        if (activePlayer === playerOneObj) {
+            activePlayer = playerTwoObj;
+        } else {
+            activePlayer = playerOneObj;
+        };
     };
-    const playRound = function() {
-        
+    const playRound = function(row, column) {
+        // verify that the selected location is open
+        /*
+        when executed, placeMarker() returns a boolean representing
+        valid/invalid move
+        */
+        if (board.placeMarker(activePlayer.getMarker(), row, column)) {
+            switchPlayerTurn();
+        } else {
+            return;
+        };
     };
 
     return {
-        makeBoard,
         playRound,
     };
 }
@@ -143,8 +170,8 @@ function GameController() {
 // Factory function for each cell on the game board
 function Cell() {
     let value = 0;
-    const addMarker = (player) => {
-        value = player;
+    const addMarker = (playerMarker) => {
+        value = playerMarker;
     };
     const getValue = () => value;
     
@@ -174,8 +201,6 @@ function Cell() {
             this.addPlayerInput = document.querySelector('');
             this.resetPlayerStatsBtn = document.querySelector('');
             this.removePlayerBtn = document.querySelector('');
-            // for playing the game
-            this.startGameBtn = document.querySelector('');
         },
         bindEvents: function() {
             this.addPlayerBtn
@@ -218,7 +243,7 @@ function Cell() {
                 .addEventListener('click', this.returnHome.bind(this));
         },
         playGame: function() {
-            
+            const game = GameController();
         },
         returnHome: function() {
 
