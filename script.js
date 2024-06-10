@@ -191,15 +191,50 @@ function GameController(
 
         // check if any row has cells which contain the same marker
         board.getBoard().forEach( (row, index) => {
+            
             // check within the cells of a given row
             let markersInRow = row.filter( (cell) => {
                 return cell.getValue() === playerMarker;
+                // returns array with the player's markers in each row
             });
+
+            // check if any row has 3 of the player's marker
             if (markersInRow.length === 3) {
                 winCondition.row = index;
             };
         });
+
+        
         // check if any column has cells which contain the same marker
+
+        // contains a count of markers in each column. 3 means 3 markers in col
+        const markersInCol = [0, 0, 0];
+
+        // loops through each row
+        board.getBoard().forEach( (row) => {
+            
+            // check in each column of current row for player's marker
+            row.forEach( (cell, colIndex) => {
+                
+                if (cell.getValue() === playerMarker) {
+                    
+                    // increase count in tracking array
+                    markersInCol[colIndex]++;
+                };
+            });
+        });
+
+        // check for win condition in the marker tracking array
+        const winCol = markersInCol.findIndex( (column) => {
+            return column === 3;
+        });
+
+        // if tracking array showed a win, then put that in the win condition
+        // object
+        if (winCol !== -1) {
+            winCondition[column] = winCol;
+        };
+
 
         // check if the two diagonals have cells which contain the same marker
 
