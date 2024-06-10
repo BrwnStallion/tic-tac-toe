@@ -125,11 +125,29 @@ function Gameboard() {
     const printBoard = function() {
         
     };
+    const checkFull = function() {
+        
+        let result = true;
+
+        getBoard().forEach( (row) => {
+            let anyEmptyInRow = row.filter( (cell) => {
+                return cell.getValue() === 0;
+            });
+
+            if (anyEmptyInRow.length > 0) {
+                result = false;
+                return;
+            };
+        });
+
+        return result;
+    };
 
     return {
         getBoard,
         placeMarker,
         printBoard,
+        checkFull,
     };
 }
 
@@ -205,46 +223,96 @@ function GameController(
         });
 
 
-        // check if any column has cells which contain the same marker
+        // check if any column/diagonal has three markers
 
-        // contains a count of markers in each column. 3 means 3 markers in col
+        // contains a count of markers in each column
         const markersInCol = [0, 0, 0];
+        // contains count of markers in each diagonal
+        const markersInDiag = [0, 0];
 
         // loops through each row
-        board.getBoard().forEach( (row) => {
+        board.getBoard().forEach( (row, rowIndex) => {
             
             // check in each column of current row for player's marker
             row.forEach( (cell, colIndex) => {
                 
+
                 if (cell.getValue() === playerMarker) {
                     
-                    // increase count in tracking array
+                    // increase count in column tracking array
                     markersInCol[colIndex]++;
+
+                    // increase count in diagonal tracking array
+                    switch (rowIndex) {
+                        case 0:     // top row
+                            if (colIndex === 0) {
+                                // top-left is part of diagonal #1
+                                markersInDiag[0]++;
+                            } else if (colIndex === 2) {
+                                // top-right is part of diagonal #2
+                                markersInDiag[1]++;
+                            };
+
+                        break;
+                        case 1:     // middle row
+                            if (colIndex === 1) {
+                                // middle-middle is part of both diagonals
+                                markersInDiag.forEach( (index) => {
+                                    markersInDiag[index]++;
+                                });
+                            };
+                        break;
+                        case 2:     // bottom row
+                            if (colIndex === 0) {
+                                // bottom-left is part of diagonal #2
+                                markersInDiag[1]++;
+                            } else if (colIndex === 2) {
+                                // bottom-right is part of diagonal #1
+                                markersInDiag[0]++;
+                            };
+                        break;
+                    };
+
                 };
             });
         });
 
-        // check for win condition in the marker tracking array
+        // check for column win condition in the marker tracking array
         const winCol = markersInCol.findIndex( (column) => {
             return column === 3;
         });
 
-        // if tracking array showed a win, then put that in the win condition
-        // object
+        // if tracking array showed a win, then put that in winCondition object
         if (winCol !== -1) {
             winCondition.column = winCol;
         };
 
+        // check for diagonal win condition in the marker tracking array
+        const winDiag = markersInDiag.findIndex( (diagonal) => {
+            return diagonal === 3;
+        });
 
-        // check if the two diagonals have cells which contain the same marker
+        // if tracking array showed a win, then put that in winCondition object
+        if (winDiag !== -1) {
+            winCondition.diagonal = winDiag;
+        };
 
-        
-        let playerWon = true;
-        activePlayer.addWin();
-        inactivePlayer.addLoss();
-        
+
+        let playerWon = false;
+
+        if ( Number.isInteger(winCondition.row)
+            || Number.isInteger(winCondition.column)
+            || Number.isInteger(winCondition.diagonal) ) {
+
+            playerWon = true;
+            activePlayer.addWin();
+            inactivePlayer.addLoss();
+        };
+
+        let allCellsFull = board.checkFull();
+
         // check if all cells full and no win condition
-        if (/* all cells full logic && */ !playerWon) {
+        if (allCellsFull && !playerWon) {
             activePlayer.addDraw();
             inactivePlayer.addDraw();
         };
