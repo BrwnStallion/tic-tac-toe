@@ -182,7 +182,7 @@ function GameController(
         };
     };
     const checkGameOver = function() {
-        let playerMarker = activePlayer.getMarker();
+        const playerMarker = activePlayer.getMarker();
         const winCondition = {
             row: '',
             column: '',
@@ -204,7 +204,7 @@ function GameController(
             };
         });
 
-        
+
         // check if any column has cells which contain the same marker
 
         // contains a count of markers in each column. 3 means 3 markers in col
@@ -232,7 +232,7 @@ function GameController(
         // if tracking array showed a win, then put that in the win condition
         // object
         if (winCol !== -1) {
-            winCondition[column] = winCol;
+            winCondition.column = winCol;
         };
 
 
