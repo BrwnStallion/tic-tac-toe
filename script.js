@@ -174,6 +174,12 @@ function GameController(
 
     let activePlayer = playerOneObj;
     let inactivePlayer = playerTwoObj;
+    const winCondition = {
+        row: '',
+        column: '',
+        diagonal: '',
+        drawStatus: false,
+    };
 
     // change player order upon rematch
     const switchPlayerTurn = function() {
@@ -201,12 +207,7 @@ function GameController(
     };
     const checkGameOver = function() {
         const playerMarker = activePlayer.getMarker();
-        const winCondition = {
-            row: '',
-            column: '',
-            diagonal: '',
-            drawStatus: false,
-        };
+        let gameOverStatus;
 
         // check if any row has cells which contain the same marker
         board.getBoard().forEach( (row, index) => {
@@ -308,16 +309,22 @@ function GameController(
             playerWon = true;
         };
 
-        let allCellsFull = board.checkFull();
-
+        
         // check if all cells full and no win condition
+        let allCellsFull = board.checkFull();
         if (allCellsFull && !playerWon) {
             winCondition[drawStatus] = true;
         };
+
+        if (playerWon || winCondition.drawStatus) {
+            gameOverStatus = true;
+        } else {
+            gameOverStatus = false;
+        };
         
-        return winCondition;
+        return gameOverStatus;
     };
-    const incrementRecords = function(winCondition) {
+    const incrementRecords = function() {
         if ( winCondition.drawStatus === false ) {
             activePlayer.addWin();
             inactivePlayer.addLoss();
