@@ -204,7 +204,8 @@ function GameController(
         const winCondition = {
             row: '',
             column: '',
-            diagonal: ''
+            diagonal: '',
+            drawStatus: false,
         };
 
         // check if any row has cells which contain the same marker
@@ -297,7 +298,7 @@ function GameController(
             winCondition.diagonal = winDiag;
         };
 
-
+        // check if winCondition has numbers for any of its values
         let playerWon = false;
 
         if ( Number.isInteger(winCondition.row)
@@ -305,18 +306,25 @@ function GameController(
             || Number.isInteger(winCondition.diagonal) ) {
 
             playerWon = true;
-            activePlayer.addWin();
-            inactivePlayer.addLoss();
         };
 
         let allCellsFull = board.checkFull();
 
         // check if all cells full and no win condition
         if (allCellsFull && !playerWon) {
+            winCondition[drawStatus] = true;
+        };
+        
+        return winCondition;
+    };
+    const incrementRecords = function(winCondition) {
+        if ( winCondition.drawStatus === false ) {
+            activePlayer.addWin();
+            inactivePlayer.addLoss();
+        } else {
             activePlayer.addDraw();
             inactivePlayer.addDraw();
         };
-        
     };
 
     return {
