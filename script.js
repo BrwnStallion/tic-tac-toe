@@ -407,6 +407,8 @@ function GameController(
         },
         addPlayer: function(name) {
             const newPlayer = Player();
+            // enforce unique name
+
             // newPlayer.setName(this.addPlayerInput.value);
             newPlayer.setName(name); // just for console testing
             this.players.push(newPlayer);
@@ -419,14 +421,78 @@ function GameController(
             const playerOneSearch = this.players.findIndex( (player) => {
                 return player.getMarker() === 1;
             });
-            return playerOneSearch;
+            return playerOneSearch;     // index or -1
         },
         getPlayerTwo: function() {
             // Look in player array for players with marker = 2
             const playerTwoSearch = this.players.findIndex( (player) => {
                 return player.getMarker() === 2;
             });
-            return playerTwoSearch;
+            return playerTwoSearch;     // index or -1
+        },
+        forceSetPlayers: function() {
+            switch (this.players.length) {
+                case 0:
+                    this.addPlayer('Player A');   // auto set to P1
+                    this.addPlayer('Player B');   // auto set to P2
+                break;
+                case 1:
+                    this.addPlayer('Player A');   // auto set to available P#
+                break;
+            };
+        },
+        forceSetOrder: function() {
+            /* 
+            Scenario: 2+ players, no order set
+                - assign P1 to players[0], P2 to players[1]
+            Scenario: 2+ players, one order set
+                - don't know which player has their order set
+                - don't know which order is set
+                - get player index for P1/P2
+                - get length of players array
+                - set first available order to first available player
+            */
+            const playersAmount = this.players.length;
+            const orderChecking = this.checkIfOrderSet();
+            
+            if (orderChecking.bothSet) {
+                return;     // exit the method and do nothing
+            };
+
+            if (playersAmount >= 2) {
+                
+                let playerSetIndex;
+                let setAction;
+                
+                // scenario 1: 2+ players, and no order is set (P1 nor P2)
+                if (orderChecking.noneSet) {
+                    this.setPlayerOne(0);
+                    this.setPlayerTwo(1);
+                    return;     // exit the method; no need to continue
+                    
+                // scenario 2a: P1 unset (P2 set)
+                } else if (orderChecking.p1Unset) {
+
+                    playerSetIndex = this.getPlayerTwo();
+                    setAction = this.setPlayerOne.bind(this);
+                    
+                // scenario 2b: P2 unset (P1 set)
+                } else if (orderChecking.p2Unset) {
+
+                    playerSetIndex = this.getPlayerOne();
+                    setAction = this.setPlayerTwo.bind(this);
+                };
+                
+                /* only true for values less than 2, and for values that are
+                not equal to set player's index */
+                for (let playerIndex = 0; playerIndex < 2; playerIndex++) {
+                    
+                    if (playerIndex !== playerSetIndex) {
+                        setAction(playerIndex);
+                        return;
+                    };
+                };
+            };
         },
         setPlayerOrder: function(event) {
             // get dataset value on the player card
@@ -448,16 +514,26 @@ function GameController(
         },
         setDefaultOrder: function(playerIndex) {
             // set default player order (for use when player first created)
-            let p1Unset = this.getPlayerOne() < 0;
-            let p2Unset = !p1Unset && this.getPlayerTwo() < 0;
-            let bothSet = !p1Unset && this.getPlayerTwo() >= 0;
+            const orderChecking = this.checkIfOrderSet();
             // set player order depending on which players are already set
-            if (p1Unset) {
+            if (orderChecking.p1Unset) {
                 this.setPlayerOne(playerIndex);
-            } else if (p2Unset) {
+            } else if (orderChecking.p2Unset) {
                 this.setPlayerTwo(playerIndex);
-            } else if (bothSet) {
+            } else if (orderChecking.bothSet) {
                 this.setPlayerNil(playerIndex);
+            };
+        },
+        checkIfOrderSet: function() {
+            let p1Unset = this.getPlayerOne() < 0;      // no P1 set
+            let p2Unset = !p1Unset && this.getPlayerTwo() < 0;  // no P2 set
+            let bothSet = !p1Unset && this.getPlayerTwo() >= 0; // both set
+            let noneSet = p1Unset && this.getPlayerTwo() < 0; // none set
+            return {
+                p1Unset,
+                p2Unset,
+                bothSet,
+                noneSet
             };
         },
         setPlayerOne: function(playerIndex) {
@@ -490,6 +566,7 @@ function GameController(
             this.bindEvents();
             this.render();
         },
+        errors: {},
         cacheDom: function() {
             this.playBtn = document.querySelector('');
             this.playAgainBtn = document.querySelector('');
@@ -510,7 +587,17 @@ function GameController(
             
         },
         playGame: function() {
-            this.game = GameController(
+            /*
+            - if players aren't set, create the needed amt of default players
+            - this will set at least player two order
+            - if order isn't set, set it according to what's unset
+            - i need to know what's unset
+            - set it according to sequence in players object
+            */
+           playerModule.forceSetPlayers();
+           playerModule.forceSetOrder();
+
+           this.game = GameController(
                 playerModule.players[playerModule.getPlayerOne()],
                 playerModule.players[playerModule.getPlayerTwo()]);
         },
