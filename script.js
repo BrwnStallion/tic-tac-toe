@@ -602,17 +602,12 @@ function GameController(
             
         },
         playGame: function() {
-            /*
-            - if players aren't set, create the needed amt of default players
-            - this will set at least player two order
-            - if order isn't set, set it according to what's unset
-            - i need to know what's unset
-            - set it according to sequence in players object
-            */
-           playerModule.forceSetPlayers();
-           playerModule.forceSetOrder();
+            
+            // automatically create players and set order as needed
+            playerModule.forceSetPlayers();
+            playerModule.forceSetOrder();
 
-           this.game = GameController(
+            this.game = GameController(
                 playerModule.players[playerModule.getPlayerOne()],
                 playerModule.players[playerModule.getPlayerTwo()]);
         },
