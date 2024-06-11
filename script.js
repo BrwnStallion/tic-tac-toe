@@ -406,11 +406,22 @@ function GameController(
 
         },
         addPlayer: function(name) {
-            const newPlayer = Player();
+            
             // enforce unique name
 
+            let playerName = name;
+            // check if the name is same as any other players' names
+            const duplicateNameIndex = this.players.findIndex( (player) => {
+                return player.getName() === playerName; // returns index or -1
+            });
+            // if it's a duplicate, then append '_1' to the proposed name
+            if (duplicateNameIndex >= 0) {
+                playerName += '_1';
+            };
+            
+            const newPlayer = Player();
             // newPlayer.setName(this.addPlayerInput.value);
-            newPlayer.setName(name); // just for console testing
+            newPlayer.setName(playerName); // just for console testing
             this.players.push(newPlayer);
             
             let playerIndex = this.players.length - 1;
