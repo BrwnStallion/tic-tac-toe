@@ -123,7 +123,13 @@ function Gameboard() {
 
     };
     const printBoard = function() {
-        
+        console.log(
+            `${board[0][0].getValue()} | ${board[0][1].getValue()} | ` + 
+            `${board[0][2].getValue()}\n${board[1][0].getValue()} | ` +
+            `${board[1][1].getValue()} | ${board[1][2].getValue()}\n` +
+            `${board[2][0].getValue()} | ${board[2][1].getValue()} | ` +
+            `${board[2][2].getValue()}`
+        );
     };
     const checkFull = function() {
         
@@ -200,6 +206,8 @@ function GameController(
         */
         if (board.placeMarker(activePlayer.getMarker(), row, column)) {
             
+            board.printBoard();
+
             // checkGameOver() ? incrementRecords() : switchPlayerTurn();
             if (checkGameOver()) {
 
@@ -243,9 +251,9 @@ function GameController(
 
         // check if any column/diagonal has three markers
 
-        // contains a count of markers in each column
+        // contains a count of active player's markers in each column
         const markersInCol = [0, 0, 0];
-        // contains count of markers in each diagonal
+        // contains count of active player's markers in each diagonal
         const markersInDiag = [0, 0];
 
         // loops through each row
@@ -254,7 +262,6 @@ function GameController(
             // check in each column of current row for player's marker
             row.forEach( (cell, colIndex) => {
                 
-
                 if (cell.getValue() === playerMarker) {
                     
                     // increase count in column tracking array
@@ -270,12 +277,11 @@ function GameController(
                                 // top-right is part of diagonal #2
                                 markersInDiag[1]++;
                             };
-
                         break;
                         case 1:     // middle row
                             if (colIndex === 1) {
                                 // middle-middle is part of both diagonals
-                                markersInDiag.forEach( (index) => {
+                                markersInDiag.forEach( (value, index) => {
                                     markersInDiag[index]++;
                                 });
                             };
@@ -290,7 +296,6 @@ function GameController(
                             };
                         break;
                     };
-
                 };
             });
         });
@@ -329,7 +334,7 @@ function GameController(
         // check if all cells full and no win condition
         let allCellsFull = board.checkFull();
         if (allCellsFull && !playerWon) {
-            winCondition[drawStatus] = true;
+            winCondition.drawStatus = true;
         };
 
         if (playerWon || winCondition.drawStatus) {
