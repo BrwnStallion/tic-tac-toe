@@ -416,20 +416,7 @@ function GameController(
             let playerIndex = this.players.length - 1;
             this.setDefaultOrder(playerIndex);
         },
-        getPlayerOne: function() {
-            // Look in player array for players with marker = 1
-            const playerOneSearch = this.players.findIndex( (player) => {
-                return player.getMarker() === 1;
-            });
-            return playerOneSearch;     // index or -1
-        },
-        getPlayerTwo: function() {
-            // Look in player array for players with marker = 2
-            const playerTwoSearch = this.players.findIndex( (player) => {
-                return player.getMarker() === 2;
-            });
-            return playerTwoSearch;     // index or -1
-        },
+        // players created when playGame() executed
         forceSetPlayers: function() {
             switch (this.players.length) {
                 case 0:
@@ -441,6 +428,7 @@ function GameController(
                 break;
             };
         },
+        // order set when playGame() executed
         forceSetOrder: function() {
             /* 
             Scenario: 2+ players, no order set
@@ -494,6 +482,7 @@ function GameController(
                 };
             };
         },
+        // user sets player order via DOM
         setPlayerOrder: function(event) {
             // get dataset value on the player card
             let playerIndex = event.target.parentElement.parentElement
@@ -512,6 +501,7 @@ function GameController(
                 break;
             };
         },
+        // default order set when player created
         setDefaultOrder: function(playerIndex) {
             // set default player order (for use when player first created)
             const orderChecking = this.checkIfOrderSet();
@@ -524,6 +514,29 @@ function GameController(
                 this.setPlayerNil(playerIndex);
             };
         },
+        setPlayerOne: function(playerIndex) {
+            this.players[playerIndex].setMarker(1);
+        },
+        setPlayerTwo: function(playerIndex) {
+            this.players[playerIndex].setMarker(2);
+        },
+        setPlayerNil: function(playerIndex) {
+            this.players[playerIndex].setMarker('');
+        },
+        getPlayerOne: function() {
+            // Look in player array for players with marker = 1
+            const playerOneSearch = this.players.findIndex( (player) => {
+                return player.getMarker() === 1;
+            });
+            return playerOneSearch;     // index or -1
+        },
+        getPlayerTwo: function() {
+            // Look in player array for players with marker = 2
+            const playerTwoSearch = this.players.findIndex( (player) => {
+                return player.getMarker() === 2;
+            });
+            return playerTwoSearch;     // index or -1
+        },
         checkIfOrderSet: function() {
             let p1Unset = this.getPlayerOne() < 0;      // no P1 set
             let p2Unset = !p1Unset && this.getPlayerTwo() < 0;  // no P2 set
@@ -535,15 +548,6 @@ function GameController(
                 bothSet,
                 noneSet
             };
-        },
-        setPlayerOne: function(playerIndex) {
-            this.players[playerIndex].setMarker(1);
-        },
-        setPlayerTwo: function(playerIndex) {
-            this.players[playerIndex].setMarker(2);
-        },
-        setPlayerNil: function(playerIndex) {
-            this.players[playerIndex].setMarker('');
         },
         switchPlayerOrder: function(playerOneIndex, playerTwoIndex) {
             this.players[playerOneIndex].setMarker(2);
@@ -601,7 +605,7 @@ function GameController(
                 playerModule.players[playerModule.getPlayerOne()],
                 playerModule.players[playerModule.getPlayerTwo()]);
         },
-        makeMove: function(row, col) {     // change to (event) when linked to DOM
+        makeMove: function(row, col) {   // change to (event) when linked to DOM
             /* this is for when it's linked to the DOM.  */
             // const row = event.target.dataset.row;
             // const col = event.target.dataset.col;
