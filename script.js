@@ -102,7 +102,7 @@ function Gameboard() {
 
     const getBoard = () => board;
     const checkVacant = function(row, column) {
-        let cell = board[row-1][column-1];
+        let cell = board[row][column];
         if (cell.getValue() === 0) {
             return true;
         } else {
@@ -115,7 +115,7 @@ function Gameboard() {
         if (checkVacant(row, column)) {
             
             // use addMarker method on Cell
-            board[row-1][column-1].addMarker(player);
+            board[row][column].addMarker(player);
             return true;
         } else {
             return false;
@@ -181,7 +181,7 @@ function GameController(
         drawStatus: false,
     };
 
-    // change player order upon rematch
+    // change active player so that turns alternate
     const switchPlayerTurn = function() {
         if (activePlayer === playerOneObj) {
             activePlayer = playerTwoObj;
@@ -199,9 +199,25 @@ function GameController(
         valid/invalid move
         */
         if (board.placeMarker(activePlayer.getMarker(), row, column)) {
-            checkGameOver();
-            switchPlayerTurn();
+            
+            // checkGameOver() ? incrementRecords() : switchPlayerTurn();
+            if (checkGameOver()) {
+
+                if (!winCondition.drawStatus) {
+                    console.log(`game over, ${activePlayer.getName()} wins`);
+                } else {
+                    console.log(`game over, draw`);
+                };
+
+                incrementRecords();
+
+            } else {
+                switchPlayerTurn();
+            };
+
         } else {
+            // wasn't a valid move - do nothing
+            console.log('invalid move. try again');
             return;
         };
     };
@@ -333,9 +349,12 @@ function GameController(
             inactivePlayer.addDraw();
         };
     };
+    const getWinCondition = () => winCondition;
 
     return {
         playRound,
+        checkGameOver,
+        getWinCondition,
     };
 }
 
@@ -470,12 +489,15 @@ function GameController(
             this.playBtn = document.querySelector('');
             this.playAgainBtn = document.querySelector('');
             this.returnHomeBtn = document.querySelector('');
+            this.cellArea = document.querySelector('');
         },
         bindEvents: function() {
             this.playBtn
                 .addEventListener('click', this.playGame.bind(this));
             this.playAgainBtn
                 .addEventListener('click', this.playGame.bind(this));
+            this.cellArea
+                .addEventListener('click', this.makeMove.bind(this));
             this.returnHomeBtn
                 .addEventListener('click', this.returnHome.bind(this));
         },
@@ -483,10 +505,18 @@ function GameController(
             
         },
         playGame: function() {
-            const game = GameController();
+            this.game = GameController(
+                playerModule.players[playerModule.getPlayerOne()],
+                playerModule.players[playerModule.getPlayerTwo()]);
+        },
+        makeMove: function(row, col) {     // change to (event) when linked to DOM
+            /* this is for when it's linked to the DOM.  */
+            // const row = event.target.dataset.row;
+            // const col = event.target.dataset.col;
+            this.game.playRound(row, col);
         },
         returnHome: function() {
-
+            this.game = '';
         },
     }
 // })();
