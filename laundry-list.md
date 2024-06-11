@@ -1,5 +1,29 @@
 Tic-Tac-Toe Laundry List
 
+06/11/24 (main)
+- DOM Ideas
+    - On each player's card, can have three buttons: P1 O P2
+        - You can set and unset various roles. 'O' allows for there to be more
+          than two players created.
+    - On each player's card, can display their record
+    - Change color of winning player's 3 markers upon win-condition
+    - Each grid location has a data attribute for row and column
+- Refactor Cell, Player factories to keep methods on the factory, and let the
+  children objects inherit those methods.
+    - Is this possible?
+- Figure out round-playing logic on GameController
+    - Logic for passing row/column/diagonal win information to rendering method
+- Logic for P1/P2 to be set before a game started
+    - COMPLETE
+- Fix diagonal marker tracking
+    - COMPLETE
+- Logic for creating default players if user just clicks 'play game' without
+  setting up player profiles
+    - COMPLETE
+- Logic for ensuring player names are unique. This is on the player module
+    - Can just check if a proposed name is unique, and then add '_1' to it
+    - COMPLETE
+
 06/10/24 (main)
 - Figure out round-playing logic on GameController
 - DOM Ideas
