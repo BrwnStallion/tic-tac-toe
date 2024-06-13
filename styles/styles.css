@@ -84,3 +84,20 @@ html {
 body {
     min-height: 100%;
 }
+
+.board-grid {
+    background-color: black;
+    
+    display: grid;
+    grid-template: repeat(3, 10rem) / repeat(3, 1fr);
+    grid-gap: 1rem;
+    
+    & div {
+        
+        background-color: white;
+
+        &.win {
+            color: green;
+        }
+    }
+}
