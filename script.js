@@ -229,6 +229,77 @@ function GameController(
             return;
         };
     };
+    const printBoard = function(parentEle) {
+        
+        const boardContainer = document.createElement('div');
+        boardContainer.classList.toggle('board-grid');
+        const cellDivs = [];    // nodeList
+        
+        // create the grid divs
+        for (let i = 0; i < 9; i++) {
+            
+            // create the grid divs
+            const cellDiv = document.createElement('div');
+            
+            // apply attributes
+            if (i >= 0 && i <= 2) {
+                cellDiv.dataset.row = '0';
+            } else if (i >= 3 && i <= 5) {
+                cellDiv.dataset.row = '1';
+            } else if (i >= 6 && i <= 8) {
+                cellDiv.dataset.row = '2';
+            };
+
+            if (i === 0 || i === 3 || i === 6) {
+                cellDiv.dataset.col = '0';
+            } else if (i === 1 || i === 4 || i === 7) {
+                cellDiv.dataset.col = '1';
+            } else if (i === 2 || i === 5 || i === 8) {
+                cellDiv.dataset.col = '2';
+            };
+
+            if (i === 0 || i === 8) {
+                cellDiv.dataset.diag = '0';
+            } else if (i === 2 || i === 6) {
+                cellDiv.dataset.diag = '1';
+            } else if (i === 4) {
+                cellDiv.dataset.diag = '01';
+            };
+
+            cellDivs.push(cellDiv);
+        };
+
+        const boardGrid = board.getBoard();     // must be defined first
+            
+        // fill/attach the grid divs
+        let nodeListIndex = 0;
+        boardGrid.forEach( (row) => {
+            
+            row.forEach( (cell) => {
+                
+                let cellContent;
+                switch (cell.getValue()) {
+                    case 0:
+                        cellContent = '';
+                    break;
+                    case 1:
+                        cellContent = 'X';
+                    break;
+                    case 2:
+                        cellContent = 'O';
+                    break;
+                };
+                // define contents of the cell
+                cellDivs[nodeListIndex].textContent = cellContent;
+                // append the cell
+                boardContainer.appendChild(cellDivs[nodeListIndex]);
+                nodeListIndex++;
+            });
+        });
+        
+        // append grid container to page
+        parentEle.appendChild(boardContainer);
+    };
     const checkGameOver = function() {
         const playerMarker = activePlayer.getMarker();
         let gameOverStatus;
@@ -360,6 +431,7 @@ function GameController(
         playRound,
         checkGameOver,
         getWinCondition,
+        printBoard
     };
 }
 
@@ -403,7 +475,7 @@ function GameController(
                 .addEventListener('click', this.unsetOrder.bind(this));
         },
         render: function() {
-
+            
         },
         addPlayer: function(name) {
             
@@ -587,6 +659,7 @@ function GameController(
             this.playAgainBtn = document.querySelector('');
             this.returnHomeBtn = document.querySelector('');
             this.cellArea = document.querySelector('');
+            this.header = document.querySelector('body');   // change to header
         },
         bindEvents: function() {
             this.playBtn
@@ -599,7 +672,26 @@ function GameController(
                 .addEventListener('click', this.returnHome.bind(this));
         },
         render: function() {
+            /* 
+            Select and change the color of the winning markers
+            - How would it be in the DOM initially?
+                - can give each cell a row, column, diagonal data attribute
+                    - data-row: 1, data-column: 1, data-diagonal: 1
+                    - then can 'for' loop through the nodeList and apply color
+                    - can have the style already in CSS, and all JS needs to do
+                      is apply a win attribute to affected cells
+                - can not apply attributes, and just hard-code the nodeList
+                  indices for each row/column/diagonal combination
+                - can use a table
+                    - this would make rows and column selection easy
             
+            Render the gameboard onto the DOM grid
+            - could hard-code each div to a cell
+            - could probably do some sort of loop that goes through the nodeList
+                - could go by row
+            */
+            
+            this.game.printBoard(this.header);
         },
         playGame: function() {
             
