@@ -231,8 +231,8 @@ function GameController(
     };
     const printBoard = function(parentEle) {
         
-        const boardContainer = document.createElement('div');
-        boardContainer.classList.toggle('board-grid');
+        const boardGrid = document.createElement('div');
+        boardGrid.classList.toggle('board-grid');
         const cellDivs = [];    // nodeList
         
         // create the grid divs
@@ -270,11 +270,11 @@ function GameController(
             cellDivs.push(cellDiv);
         };
 
-        const boardGrid = board.getBoard();     // must be defined first
+        const boardObj = board.getBoard();     // must be defined first
             
         // fill/attach the grid divs
         let nodeListIndex = 0;
-        boardGrid.forEach( (row) => {
+        boardObj.forEach( (row) => {
             
             row.forEach( (cell) => {
                 
@@ -293,15 +293,13 @@ function GameController(
                 // define contents of the cell
                 cellDivs[nodeListIndex].textContent = cellContent;
                 // append the cell
-                boardContainer.appendChild(cellDivs[nodeListIndex]);
+                boardGrid.appendChild(cellDivs[nodeListIndex]);
                 nodeListIndex++;
             });
         });
         
         // append grid container to page
-        parentEle.insertAdjacentElement('beforeend', boardContainer);
-            // change to 'afterend' once parentEle actually becomes header
-            // instead of body
+        parentEle.appendChild(boardGrid);
     };
     const checkGameOver = function() {
         const playerMarker = activePlayer.getMarker();
