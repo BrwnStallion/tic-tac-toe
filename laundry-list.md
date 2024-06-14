@@ -1,5 +1,22 @@
 Tic-Tac-Toe Laundry List
 
+06/14/24 - main
+- DOM Ideas
+    - On each player's card, can have three buttons: P1 O P2
+        - You can set and unset various roles. 'O' allows for there to be more
+          than two players created.
+    - On each player's card, can display their record
+    - Change color of winning player's 3 markers upon win-condition
+    - Have the play buttons be set to display:none in CSS
+        - this would allow them to be cached and in the DOM
+- Refactor Cell, Player factories to keep methods on the factory, and let the
+  children objects inherit those methods.
+    - Is this possible?
+- Figure out round-playing logic on GameController
+    - Logic for passing row/column/diagonal win information to rendering method
+- Logic for writing to each cell from DOM interaction
+    - COMPLETE
+
 06/13/24 (main)
 - DOM Ideas
     - On each player's card, can have three buttons: P1 O P2
