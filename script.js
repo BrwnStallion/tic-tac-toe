@@ -240,6 +240,7 @@ function GameController(
             
             // create the grid divs
             const cellDiv = document.createElement('div');
+            cellDiv.classList.toggle('cell');
             
             // apply attributes
             if (i >= 0 && i <= 2) {
@@ -298,7 +299,9 @@ function GameController(
         });
         
         // append grid container to page
-        parentEle.appendChild(boardContainer);
+        parentEle.insertAdjacentElement('beforeend', boardContainer);
+            // change to 'afterend' once parentEle actually becomes header
+            // instead of body
     };
     const checkGameOver = function() {
         const playerMarker = activePlayer.getMarker();
@@ -651,25 +654,25 @@ function GameController(
         init: function () {
             this.cacheDom();
             this.bindEvents();
+            this.playGame();
             this.render();
         },
         errors: {},
         cacheDom: function() {
-            this.playBtn = document.querySelector('');
-            this.playAgainBtn = document.querySelector('');
-            this.returnHomeBtn = document.querySelector('');
-            this.cellArea = document.querySelector('');
+            // this.playBtn = document.querySelector('');
+            // this.playAgainBtn = document.querySelector('');
+            // this.returnHomeBtn = document.querySelector('');
             this.header = document.querySelector('body');   // change to header
+            this.body = document.querySelector('body');
         },
         bindEvents: function() {
-            this.playBtn
-                .addEventListener('click', this.playGame.bind(this));
-            this.playAgainBtn
-                .addEventListener('click', this.playGame.bind(this));
-            this.cellArea
-                .addEventListener('click', this.makeMove.bind(this));
-            this.returnHomeBtn
-                .addEventListener('click', this.returnHome.bind(this));
+            // this.playBtn
+            //     .addEventListener('click', this.playGame.bind(this));
+            // this.playAgainBtn
+            //     .addEventListener('click', this.playGame.bind(this));
+            this.body.addEventListener('click', this.makeMove.bind(this));
+            // this.returnHomeBtn
+            //     .addEventListener('click', this.returnHome.bind(this));
         },
         render: function() {
             /* 
@@ -691,7 +694,7 @@ function GameController(
                 - could go by row
             */
             
-            this.game.printBoard(this.header);
+            this.game.printBoard(this.header);  // method is on gamecontroller
         },
         playGame: function() {
             
@@ -703,11 +706,14 @@ function GameController(
                 playerModule.players[playerModule.getPlayerOne()],
                 playerModule.players[playerModule.getPlayerTwo()]);
         },
-        makeMove: function(row, col) {   // change to (event) when linked to DOM
+        makeMove: function(event) {   // change to (event) when linked to DOM
             /* this is for when it's linked to the DOM.  */
-            // const row = event.target.dataset.row;
-            // const col = event.target.dataset.col;
-            this.game.playRound(row, col);
+            if (event.target.className === 'cell') {
+                const row = event.target.dataset.row;
+                const col = event.target.dataset.col;
+                this.game.playRound(row, col);
+                this.render();
+            };
         },
         returnHome: function() {
             this.game = '';
