@@ -664,6 +664,7 @@ function GameController(
             // this.returnHomeBtn = document.querySelector('');
             this.header = document.querySelector('body');   // change to header
             this.body = document.querySelector('body');
+            this.gameContainer = document.querySelector('.game-container');
         },
         bindEvents: function() {
             // this.playBtn
@@ -693,8 +694,8 @@ function GameController(
             - could probably do some sort of loop that goes through the nodeList
                 - could go by row
             */
-            
-            this.game.printBoard(this.header);  // method is on gamecontroller
+            this.gameContainer.innerHTML = '';
+            this.game.printBoard(this.gameContainer);  // method's on controller
         },
         playGame: function() {
             
