@@ -1,103 +1,178 @@
 /* ---------------------------- Reset Styles -------------------------------- */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 
 html {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-*, *:before, *:after {
-    box-sizing: inherit;
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
 }
 
 body {
-	line-height: 1;
+  line-height: 1;
 }
 
-ol, ul {
-	list-style: none;
+ol,
+ul {
+  list-style: none;
 }
 
 a {
-    color: inherit;
+  color: inherit;
 
-    &:link, &:visited, &:hover, &:active {
-        text-decoration: none;
-    }
+  &:link,
+  &:visited,
+  &:hover,
+  &:active {
+    text-decoration: none;
+  }
 }
 
-
-button, input, optgroup, select, textarea {
-    font-family: inherit;
-    font-size: 100%;
-    line-height: 1.15;
-    margin: 0;
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
 }
 
-button, input {
-    overflow: visible;
+button,
+input {
+  overflow: visible;
 }
 
 :root {
-    font-size: 16px;
-    --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+  font-size: 16px;
+  --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
-    /* ----------------------- Variables ---------------------------- */
-    
-    /* Colors */
+  /* ----------------------- Variables ---------------------------- */
 
-    /* Sizes: Margins, Padding, Gaps */
+  /* Colors */
 
-    /* Sizes: Widths, Heights */
+  /* Sizes: Margins, Padding, Gaps */
 
-    /* Sizes: Fonts */
+  /* Sizes: Widths, Heights */
 
+  /* Sizes: Fonts */
 }
-
 
 /* ------------------------------ Styles ------------------------------------ */
 
 html {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    min-height: 100%;
+  min-height: 100%;
 }
 
 .board-grid {
-    background-color: black;
-    
-    display: grid;
-    grid-template: repeat(3, 10rem) / repeat(3, 1fr);
-    grid-gap: 1rem;
-    
-    & div {
-        
-        background-color: white;
+  background-color: black;
 
-        &.win {
-            color: green;
-        }
+  display: grid;
+  grid-template: repeat(3, 10rem) / repeat(3, 1fr);
+  grid-gap: 1rem;
+
+  & div {
+    background-color: white;
+
+    &.win {
+      color: green;
     }
+  }
 }
